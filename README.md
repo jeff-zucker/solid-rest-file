@@ -10,28 +10,33 @@ with rdflib.js in nodejs context, it supports all fetcher methods
 
 Not implemented: OPTION and PATCH (and therefore rdflib's Updater).
 
-**Note**: this library incorporates and extend's Thomas Bergwinkl's excellent [file-fetch](https://github.com/bergos/file-fetch)
-
+**Note**: this library incorporates and extends Thomas Bergwinki's excellent [file-fetch](https://github.com/bergos/file-fetch)
 
 ## Requests
 
 This library expects IRIs that start with "file://" and are followed by
-a full pathname.  For a file located at /home/me/somepath/somefile.txt,
-the IRI would be
+a full pathname. A file located at /home/me/somepath/somefile.txt
+would be requested like this:
 
-   file:///home/me/somepath/somefile.txt
+  ```javascript
+  const fetch = require("solid-rest-file");
+  fetch( "file:///home/me/somepath/somefile.txt" ).then( response => {
+      if(response.ok) console.log( response.body );
+      else console.log( response.status, response.statusText );
+  },err=>{});
+  ```
 
-Note the three slashes.
+Note the three slashes in the pathname.
 
 A GET request does not require request options, all other methods should follow the [Solid REST Specification]().  For example, to create a new Container:
 
   ```javascript
-  const rest = require("solid-restfile");
-  rest.fetch( "file://somepath", {
+  const fetch = require("solid-rest-file");
+  fetch( "file://somepath", {
         "Method" : "POST",
         "Content-Type": "text/turtle",
         "Link": '<http://www.w3.org/ns/ldp#BasicContainer>; rel="type"'
-  })
+  }).then( ...
 ```
 ## Responses
 

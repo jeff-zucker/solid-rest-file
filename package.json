@@ -16,6 +16,9 @@
     "url": "git+https://github.com/jeff-zucker/solid-rest-file.git"
   },
   "keywords": [],
+  "contributors": [
+    {"name":"Thomas Bergwinki"
+   ],
   "bugs": {
     "url": "https://github.com/jeff-zucker/solid-rest-file/issues"
   },
