@@ -27,7 +27,7 @@ Note the three slashes in the pathname.
 A GET request uses fetch() with a single parameter: the pathname of the resource requested
 
   ```javascript
-  const fetch = require("./src");
+  const fetch = require("solid-rest-file");
   const path  = require("path");
   const file  = path.join("file://",process.cwd(), "foo.txt");
   fetch( file ).then( response => {
