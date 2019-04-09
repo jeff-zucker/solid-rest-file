@@ -32,7 +32,7 @@ A GET request does not require request options, all other methods should follow 
 
   ```javascript
   const fetch = require("solid-rest-file");
-  fetch( "file://somepath", {
+  fetch( "file:///somepath", {
         "Method" : "POST",
         "Content-Type": "text/turtle",
         "Link": '<http://www.w3.org/ns/ldp#BasicContainer>; rel="type"'
