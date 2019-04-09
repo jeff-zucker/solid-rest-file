@@ -6,12 +6,6 @@ const folder  = "file://" + path.join(process.cwd(),"test");
 const file    = path.join( folder,"file-test.ttl");
 const msg     = "hello world";
 
-
-/*
-putResource(file).then(res=>{
-    console.log(res)
-},err=>{console.log("Error : "+err)})
-*/
 test('POST Container',()=>{
     return expect(postContainer(folder)).resolves.toBe(201);
 });
@@ -42,13 +36,13 @@ async function getResource(file){
     return( txt === msg );
 }
 async function putResource(){
-    let res = await fetch(file,{method:"PUT",body:msg});
+    let res = await fetch(file,{Method:"PUT",body:msg});
     return res.status;
 }
 async function postResource(pathname){
     let results;
     try { results = await fetch(pathname,{
-        "method":"POST",
+        "Method":"POST",
         "Link": '<http://www.w3.org/ns/ldp#Resource>; rel="type"',
         "contentType": "text/turtle",
         "body": msg
@@ -59,7 +53,7 @@ async function postResource(pathname){
 async function postContainer(pathname){
     let results;
     try { results = await fetch(pathname, {
-        "method":"POST",
+        "Method":"POST",
         "contentType": "text/turtle",
         "Link": '<http://www.w3.org/ns/ldp#BasicContainer>; rel="type"'
     })  }
@@ -75,7 +69,7 @@ async function getContainer(pathname){
 }
 async function deleteResource(pathname){
     let results;
-    try { results = await fetch(pathname,{method:"DELETE"});  }
+    try { results = await fetch(pathname,{Method:"DELETE"});  }
     catch(err) { results = err.response; }
     return results.status;
 }

@@ -36,7 +36,7 @@ function response (status, body, headers) {
 
 async function fetch (iri, options) {
   options = options || {}
-  options.method = (options.method || 'GET').toUpperCase()
+  options.method = (options.method || options.Method || 'GET').toUpperCase()
   options.contentTypeLookup = options.contentTypeLookup || contentTypeLookup
   const pathname = decodeURIComponent(url.parse(iri).pathname)
   const fstat = await _fileStat(pathname);
@@ -83,7 +83,7 @@ async function fetch (iri, options) {
           return Promise.resolve( response(
             200,
             success,
-            {'content-type':options.contentTypeLookup(path.extname(pathname))}
+            {'Content-Type':options.contentTypeLookup(path.extname(pathname))}
           ))
       }
   }
