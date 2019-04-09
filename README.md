@@ -37,13 +37,21 @@ A GET request uses fetch() with a single parameter: the pathname of the resource
 All other requests use fetch() with two parameters, the pathname and a set of options as specified in the [Solid REST Specification](https://github.com/solid/solid-spec/blob/master/api-rest.md).  For example, to create a new Container:
 
   ```javascript
-  const fetch = require("solid-rest-file");
-  fetch( "file:///somepath", {
-        "Method" : "POST",
-        "Content-Type": "text/turtle",
-        "Link": '<http://www.w3.org/ns/ldp#BasicContainer>; rel="type"'
-  }).then( ...
-```
+  const fetch = require("./src");
+  const path  = require("path");
+  const file  = path.join("file://",process.cwd(), "foo.txt");
+  fetch( file ).then( response => {
+      if(response.ok) {
+          response.text().then( txt => {
+              console.log(txt)
+          }, err => {"read error : "});
+      }
+      else {
+          console.log( response.status, response.statusText );
+      }
+  },err=>{"fetch error : "+err});
+  ```
+
 ## Responses
 
 * POST Container
