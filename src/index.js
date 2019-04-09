@@ -115,8 +115,10 @@ async function fetch (iri, options) {
           s.push(options.body)
           s.push(null)  
           options.body = s;
+          let status = 201;       // create new
+          if(fstat) status = 200; // replace existing
           options.body.pipe(fs.createWriteStream(pathname)).on('finish',()=>{
-              resolve( response(201,"Created",{'location': pathname}) )
+              resolve( response(status,"Created",{'location': pathname}) )
           }).on('error', (err) => { 
                resolve( response(500, new ReadableError(err)) )
           })
