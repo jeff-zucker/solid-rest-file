@@ -70,13 +70,13 @@ All other requests use fetch() with two parameters, the pathname and a set of op
    * 200 on success
    * 404 if not found
    * 500 on other failure
-   * returns body of resource
+   * returns body of resource as a readable stream in response.body
    * returns content-type in header
 * GET Container
    * 200 on success
    * 404 on not found
    * 500 on other failure
-   * returns turtle representation of ldp:BasicContainer
+   * returns turtle representation of ldp:BasicContainer as readable stream
 * DELETE Resource
 * DELETE Container
    * 204 on success
