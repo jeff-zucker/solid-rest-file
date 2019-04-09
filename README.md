@@ -8,7 +8,7 @@ response object with appropriate status codes and headers.  When used
 with rdflib.js in nodejs context, it supports all fetcher methods 
 (load, putBack, webOperation, etc.) on local files and folders.
 
-Not implemented: OPTION and PATCH (and therefore rdflib's Updater).
+Not implemented: HEAD, OPTION and PATCH (and therefore rdflib's Updater).
 
 **Note**: this library incorporates and extends Thomas Bergwinki's excellent [file-fetch](https://github.com/bergos/file-fetch)
 
