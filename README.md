@@ -56,7 +56,7 @@ A GET request does not require request options, all other methods should follow 
    * 404 if not found
    * 500 on other failure
    * returns body of resource
-   * returns content-type in location header
+   * returns content-type in header
 * GET Container
    * 200 on success
    * 404 on not found
