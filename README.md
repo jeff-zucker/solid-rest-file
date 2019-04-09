@@ -1,6 +1,6 @@
 # Solid REST file
 
-## treat a file system as a minimal Solid server
+## treat a file system as a (very) minimal Solid server
 
 Implements a subset of the Solid REST spec for file-systems.  Supports
 addressing the file system with file:// IRIs and returns an HTTP
@@ -10,7 +10,7 @@ with rdflib.js in nodejs context, it supports all fetcher methods
 
 Not implemented: OPTION and PATCH (and therefore rdflib's Updater).
 
-**Note**: this library incorporates and extend's @bergos' excellent [file-fetch](https://github.com/bergos/file-fetch)
+**Note**: this library incorporates and extend's Thomas Bergwinkl's excellent [file-fetch](https://github.com/bergos/file-fetch)
 
 
 ## Requests
@@ -35,30 +35,30 @@ A GET request does not require request options, all other methods should follow 
 ```
 ## Responses
 
-POST Container
+* POST Container
    * 201 on success
    * 409 if Container pre-exists or other failure
    * supports recursive creation of folder tree
-POST Resource
-PUT Resource
+* POST Resource
+* PUT Resource
    * 200 on success if resource is replaced
    * 201 on success if resource is created
    * 406 on body empty
    * 500 on containing folder not found or other failure
    * returns created path in location header
-GET Resource
+* GET Resource
    * 200 on success
    * 404 if not found
    * 500 on other failure
    * returns body of resource
    * returns content-type in location header
-GET Container
+* GET Container
    * 200 on success
    * 404 on not found
    * 500 on other failure
    * returns turtle representation of ldp:BasicContainer
-DELETE Resource
-DELETE Container
+* DELETE Resource
+* DELETE Container
    * 204 on success
    * 404 on not found
    * 409 on Container-not-empty or other failure
