@@ -2,7 +2,7 @@
 
 ## treat a file system as a (very) minimal Solid server
 
-Implements a subset of the Solid REST spec for file-systems.  Supports
+Implements a subset of the [Solid REST Specification](https://github.com/solid/solid-spec/blob/master/api-rest.md) for file-systems.  Supports
 addressing the file system with file:// IRIs and returns an HTTP
 response object with appropriate status codes and headers.  When used
 with rdflib.js in nodejs context, it supports all fetcher methods 
@@ -18,6 +18,12 @@ This library expects IRIs that start with "file://" and are followed by
 a full pathname. A file located at /home/me/somepath/somefile.txt
 would be requested like this:
 
+  file:///home/me/somepath/somefile.txt
+
+Note the three slashes in the pathname.
+
+A GET request uses fetch() with a single parameter: the pathname of the resource requested
+
   ```javascript
   const fetch = require("solid-rest-file");
   fetch( "file:///home/me/somepath/somefile.txt" ).then( response => {
@@ -26,9 +32,7 @@ would be requested like this:
   },err=>{});
   ```
 
-Note the three slashes in the pathname.
-
-A GET request does not require request options, all other methods should follow the [Solid REST Specification]().  For example, to create a new Container:
+All other requests use fetch() with two parameters, the pathname and a set of options as specified in the [Solid REST Specification](https://github.com/solid/solid-spec/blob/master/api-rest.md).  For example, to create a new Container:
 
   ```javascript
   const fetch = require("solid-rest-file");
