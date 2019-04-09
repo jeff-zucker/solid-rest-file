@@ -47,7 +47,7 @@ All other requests use fetch() with two parameters, the pathname and a set of op
   ```javascript
   fetch( "file:///somepath", {
       "Method":"POST",
-      "contentType": "text/turtle",
+      "Content-Type": "text/turtle",
       "Link": '<http://www.w3.org/ns/ldp#BasicContainer>; rel="type"'
    }).then( ...
 
