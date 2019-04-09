@@ -27,16 +27,6 @@ Note the three slashes in the pathname.
 A GET request uses fetch() with a single parameter: the pathname of the resource requested
 
   ```javascript
-  const fetch = require("solid-rest-file");
-  fetch( "file:///home/me/somepath/somefile.txt" ).then( response => {
-      if(response.ok) console.log( response.body );
-      else console.log( response.status, response.statusText );
-  },err=>{});
-  ```
-
-All other requests use fetch() with two parameters, the pathname and a set of options as specified in the [Solid REST Specification](https://github.com/solid/solid-spec/blob/master/api-rest.md).  For example, to create a new Container:
-
-  ```javascript
   const fetch = require("./src");
   const path  = require("path");
   const file  = path.join("file://",process.cwd(), "foo.txt");
@@ -50,6 +40,17 @@ All other requests use fetch() with two parameters, the pathname and a set of op
           console.log( response.status, response.statusText );
       }
   },err=>{"fetch error : "+err});
+  ```
+
+All other requests use fetch() with two parameters, the pathname and a set of options as specified in the [Solid REST Specification](https://github.com/solid/solid-spec/blob/master/api-rest.md).  For example, to create a new Container:
+
+  ```javascript
+  fetch( "file:///somepath", {
+      "Method":"POST",
+      "contentType": "text/turtle",
+      "Link": '<http://www.w3.org/ns/ldp#BasicContainer>; rel="type"'
+   }).then( ...
+
   ```
 
 ## Responses
