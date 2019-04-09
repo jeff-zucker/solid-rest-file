@@ -1,0 +1,32 @@
+{
+  "name": "solid-rest-file",
+  "version": "0.0.1",
+  "description": "a minimal Solid REST server using the local file system",
+  "author": "Jeff Zucker",
+  "license": "MIT",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jeff-zucker/solid-rest-file.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/jeff-zucker/solid-rest-file/issues"
+  },
+  "homepage": "https://github.com/jeff-zucker/solid-rest-file#readme",
+  "dependencies": {
+    "concat-stream": "^2.0.0",
+    "mime-types": "^2.1.22",
+    "node-fetch": "^2.3.0",
+    "readable-error": "^1.0.0"
+  },
+  "devDependencies": {
+    "jest": "^24.7.1"
+  }
+}

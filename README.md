@@ -1,2 +1,64 @@
-# solid-rest-file
-a minimal Solid REST server using the local file system
+# Solid REST file
+
+## treat a file system as a minimal Solid server
+
+Implements a subset of the Solid REST spec for file-systems.  Supports
+addressing the file system with file:// IRIs and returns an HTTP
+response object with appropriate status codes and headers.  When used
+with rdflib.js in nodejs context, it supports all fetcher methods 
+(load, putBack, webOperation, etc.) on local files and folders.
+
+Not implemented: OPTION and PATCH (and therefore rdflib's Updater).
+
+**Note**: this library incorporates and extend's @bergos' excellent [file-fetch](https://github.com/bergos/file-fetch)
+
+
+## Requests
+
+This library expects IRIs that start with "file://" and are followed by
+a full pathname.  For a file located at /home/me/somepath/somefile.txt,
+the IRI would be
+
+   file:///home/me/somepath/somefile.txt
+
+Note the three slashes.
+
+A GET request does not require request options, all other methods should follow the [Solid REST Specification]().  For example, to create a new Container:
+
+  ```javascript
+  const rest = require("solid-restfile");
+  rest.fetch( "file://somepath", {
+        "Method" : "POST",
+        "Content-Type": "text/turtle",
+        "Link": '<http://www.w3.org/ns/ldp#BasicContainer>; rel="type"'
+  })
+```
+## Responses
+
+POST Container
+   * 201 on success
+   * 409 if Container pre-exists or other failure
+   * supports recursive creation of folder tree
+POST Resource
+PUT Resource
+   * 200 on success if resource is replaced
+   * 201 on success if resource is created
+   * 406 on body empty
+   * 500 on containing folder not found or other failure
+   * returns created path in location header
+GET Resource
+   * 200 on success
+   * 404 if not found
+   * 500 on other failure
+   * returns body of resource
+   * returns content-type in location header
+GET Container
+   * 200 on success
+   * 404 on not found
+   * 500 on other failure
+   * returns turtle representation of ldp:BasicContainer
+DELETE Resource
+DELETE Container
+   * 204 on success
+   * 404 on not found
+   * 409 on Container-not-empty or other failure
