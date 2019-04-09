@@ -18,7 +18,9 @@ This library expects IRIs that start with "file://" and are followed by
 a full pathname. A file located at /home/me/somepath/somefile.txt
 would be requested like this:
 
+   ```
   file:///home/me/somepath/somefile.txt
+   ```
 
 Note the three slashes in the pathname.
 
