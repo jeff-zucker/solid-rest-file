@@ -2,15 +2,27 @@
 const fetch = require('../src');
 const path  = require("path")
 
-const folder  = "file://" + path.join(process.cwd(),"test");
-const file    = path.join( folder,"file-test.ttl");
+const base  = path.join("file://",process.cwd());
+const foldername  = "test";
+const filename   = "file-test.ttl";
+const folder   = path.join( base,foldername );
+const file    = path.join( folder, filename );
 const msg     = "hello world";
 
+async function run(){
+    console.log(
+        await postContainer(base,foldername)
+    );
+}
+if(typeof test === "undefined") {
+    run();
+}
+else {
 test('POST Container',()=>{
-    return expect(postContainer(folder)).resolves.toBe(201);
+    return expect(postContainer(base,foldername)).resolves.toBe(201);
 });
 test('POST Resource',()=>{
-    return expect(postResource(file+"X")).resolves.toBe(201);
+    return expect(postResource(folder,filename+"X")).resolves.toBe(201);
 });
 test('PUT Resource',  ()=>{
     return expect(putResource(file)).resolves.toBe(201);
@@ -28,7 +40,7 @@ test('DELETE Resource',()=>{
 test('DELETE Container',()=>{
     return expect(deleteResource(folder)).resolves.toBe(204)
 });
-
+}
 async function getResource(file){
     let res = await fetch(file);
     if( res.status != 200 ) return false;
@@ -39,23 +51,25 @@ async function putResource(){
     let res = await fetch(file,{Method:"PUT",body:msg});
     return res.status;
 }
-async function postResource(pathname){
+async function postResource(folder,file){
     let results;
-    try { results = await fetch(pathname,{
+    try { results = await fetch(folder,{
         "Method":"POST",
         "Link": '<http://www.w3.org/ns/ldp#Resource>; rel="type"',
         "contentType": "text/turtle",
-        "body": msg
+        "body": msg,
+        "Slug": file 
     })  }
     catch(err) { results = err.response; console.log(err) }
     return (results.status);
 }
-async function postContainer(pathname){
+async function postContainer(container,newFolder){
     let results;
-    try { results = await fetch(pathname, {
+    try { results = await fetch( container, {
         "Method":"POST",
         "contentType": "text/turtle",
-        "Link": '<http://www.w3.org/ns/ldp#BasicContainer>; rel="type"'
+        "Link": '<http://www.w3.org/ns/ldp#BasicContainer>; rel="type"',
+        "Slug": newFolder
     })  }
     catch(err) { results = err.response; }
     return (results.status);

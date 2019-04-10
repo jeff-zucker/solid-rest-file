@@ -48,7 +48,7 @@ async function fetch (iri, options) {
   options = options || {}
   options.method = (options.method || options.Method || 'GET').toUpperCase()
   options.contentTypeLookup = options.contentTypeLookup || contentTypeLookup
-  const pathname = decodeURIComponent(url.parse(iri).pathname)
+  let pathname = decodeURIComponent(url.parse(iri).pathname)
   const fstat = await _fileStat(pathname);
 
   /* FOLDER GET
@@ -64,10 +64,17 @@ async function fetch (iri, options) {
   }
 
   if( options.method==="POST"){
+      /*
+         Fail POST if the Containing Folder doesn't exist
+                or if no Slug is provided
+         Set the pathname to be pathname join Slug
+      */
+      if( !fstat ) return Promise.resolve(response(404));
+      if( !options.Slug ) return Promise.resolve(response(406));
+      pathname = path.join(pathname,options.Slug);
       /* 
          FOLDER POST
       */
-
       if( options.Link && options.Link.match("Container") ) {
           return Promise.resolve( response( await _makeFolder(pathname) ) );
       }
@@ -125,8 +132,7 @@ async function fetch (iri, options) {
           s.push(options.body)
           s.push(null)  
           options.body = s;
-          let status = 201;       // create new
-          if(fstat) status = 200; // replace existing
+          let status = 201;
           options.body.pipe(fs.createWriteStream(pathname)).on('finish',()=>{
               resolve( response(status,"Created",{'location': pathname}) )
           }).on('error', (err) => { 

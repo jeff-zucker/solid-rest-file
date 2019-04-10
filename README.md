@@ -42,16 +42,18 @@ A GET request uses fetch() with a single parameter: the pathname of the resource
   },err=>{"fetch error : "+err});
   ```
 
-All other requests use fetch() with two parameters, the pathname and a set of options as specified in the [Solid REST Specification](https://github.com/solid/solid-spec/blob/master/api-rest.md).  For example, to create a new Container:
+All other requests use fetch() with two parameters, the pathname and a set of options as specified in the [Solid REST Specification](https://github.com/solid/solid-spec/blob/master/api-rest.md).  For example, to create a new Container at the location /somepath/morepath/newFolder
 
   ```javascript
-  fetch( "file:///somepath", {
+  fetch( "file:///somepath/morepath", {
       "Method":"POST",
       "Content-Type": "text/turtle",
-      "Link": '<http://www.w3.org/ns/ldp#BasicContainer>; rel="type"'
+      "Link": '<http://www.w3.org/ns/ldp#BasicContainer>; rel="type"',
+      "Slug": "newFolder"
    }).then( ...
 
   ```
+As per the spec, this will fail if the containing folder "/somepath/morepath" does not already exist.
 
 ## Responses
 
@@ -60,12 +62,13 @@ All other requests use fetch() with two parameters, the pathname and a set of op
    * 409 if Container pre-exists or other failure
    * supports recursive creation of folder tree
 * POST Resource
-* PUT Resource
    * 200 on success if resource is replaced
    * 201 on success if resource is created
    * 406 on body empty
    * 500 on containing folder not found or other failure
    * returns created path in location header
+* PUT Resource
+   * same as POST Resouce except if containing folder is not found, it is created (including intermediary folders if needed)
 * GET Resource
    * 200 on success
    * 404 if not found
