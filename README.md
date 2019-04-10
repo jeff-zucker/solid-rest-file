@@ -59,13 +59,14 @@ As per the spec, this will fail if the containing folder "/somepath/morepath" do
 
 * POST Container
    * 201 on success
+   * 404 if the Container of the Container does not exist
    * 409 if Container pre-exists or other failure
-   * supports recursive creation of folder tree
+   * returns created path in location header
 * POST Resource
-   * 200 on success if resource is replaced
-   * 201 on success if resource is created
+   * 201 on success
+   * 404 if the Container of the new Resource does not exist
    * 406 on body empty
-   * 500 on containing folder not found or other failure
+   * 500 on other failure
    * returns created path in location header
 * PUT Resource
    * same as POST Resouce except if containing folder is not found, it is created (including intermediary folders if needed)

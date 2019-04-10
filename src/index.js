@@ -82,7 +82,7 @@ async function fetch (iri, options) {
           FILE POST (handled same as PUT)
       */
       else if( options.Link && options.Link.match("Resource") ) {
-          options.method = "PUT"
+          options.method = "FILE-POST"
       }
   }
 
@@ -122,7 +122,12 @@ async function fetch (iri, options) {
 
   /* FILE PUT
   */
-  else if (options.method === 'PUT') {
+  else if (options.method === 'PUT' || options.method === "FILE-POST" ) {
+      if(options.method==='PUT'){
+          let filename = path.basename(pathname);
+          let foldername = pathname.replace(/filename$/,'');
+          /* TO BE DONE */          
+      }
       return new Promise((resolve) => {
           if (!options.body) { return resolve(
             response(406, new ReadableError(new Error('body required')))
