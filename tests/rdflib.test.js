@@ -6,13 +6,11 @@ let store   = $rdf.graph()
 let fetcher = $rdf.fetcher(store,{fetch:solid.auth.fetch})
 
 const base  = path.join("file://",process.cwd());
-const foldername  = "test";
-const filename   = "file-test.ttl";
-const folder   = path.join( base,foldername );
-const file    = path.join( folder, filename );
-const msg     = "hello world";
-
-
+const foldername = "test";
+const filename = "file-test.ttl";
+const folder = path.join( base,foldername );
+const file = path.join( folder, filename );
+const msg = "hello world";
 const DOC = $rdf.Namespace(file);
 
 test('POST Container',()=>{
@@ -97,13 +95,3 @@ function emptyStore(){
     store = $rdf.graph()
     fetcher = $rdf.fetcher(store,{fetch:solid.auth.fetch})
 }
-/*
-test('DELETE Container fails with 409 if non-empty', () => {
-    expect( deleteResource(folder) ).resolves.toBe(409);
-});
-
-test('POST Container fails with 409 if already esists', () => {
-    expect( postContainer(folder) ).resolves.toBe(409);
-});
-
-*/

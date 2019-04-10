@@ -127,17 +127,19 @@ async function fetch (iri, options) {
       }
   }
 
-  /* FILE PUT
+  /* FILE PUT and FILE POST
   */
   else if (options.method === 'PUT' || options.method === "FILE-POST" ) {
       if(options.method==='PUT'){
           let filename = path.basename(pathname);
-          let foldername = pathname.replace(/filename$/,'');
-          /* TO BE DONE */          
+          let reg = new RegExp(filename+"\$")
+          let foldername = pathname.replace(reg,'');
+          let fresults = _makeFolder(foldername,"recursive");
+          if(!fresults===201) Promise.resolve( response(500) ); 
       }
       return new Promise((resolve) => {
           if (!options.body) { return resolve(
-            response(406, new ReadableError(new Error('body required')))
+            response(406)
           )}
           let Readable = require('stream').Readable
           let s = new Readable
@@ -148,7 +150,7 @@ async function fetch (iri, options) {
           options.body.pipe(fs.createWriteStream(pathname)).on('finish',()=>{
               resolve( response(status,"Created",{'location': pathname}) )
           }).on('error', (err) => { 
-               resolve( response(500, new ReadableError(err)) )
+               resolve( response(500) )
           })
       })
 
@@ -157,9 +159,7 @@ async function fetch (iri, options) {
   /* UNKNOWN METHOD
   */
   else {
-      return Promise.resolve(
-          response(405, new ReadableError(new Error('method not allowed')))
-      )
+      return Promise.resolve( response(405) )
   }
 }
 
@@ -188,8 +188,9 @@ function _unlinkFolder(fn){
     });
 }
 function _makeFolder(fn,recursive){
+    fn = fn.replace(/\/$/,'');
     return new Promise(function(resolve) {
-        let opts = (recursive) ? {recursive:true} : {}
+        let opts = (recursive) ? {"recursive":true} : {}
         fs.mkdir( fn, opts, (err) => {
             if(err) {
                 resolve( 409 )
