@@ -4,13 +4,18 @@
 
 Implements a subset of the [Solid REST Specification](https://github.com/solid/solid-spec/blob/master/api-rest.md) for file-systems.  Supports
 addressing the file system with file:// IRIs and returns an HTTP
-response object with appropriate status codes and headers.  When used
-with rdflib.js in nodejs context, it supports all fetcher methods 
-(load, putBack, webOperation, etc.) on local files and folders.
+response object with appropriate status codes and headers.  
 
 Not implemented: HEAD, OPTION and PATCH (and therefore rdflib's Updater).
 
 **Note**: this library incorporates and extends Thomas Bergwinki's excellent [file-fetch](https://github.com/bergos/file-fetch)
+
+## Using this library with rdflib other Solid Tools
+
+Although this library may be used stand-alone, it is meant primarily for use with other Solid tools. This library is included in solid-auth-cli, the nodejs auth/fetch library for Solid which is itself included in rdflib.js and solid-file-client and (soon) query-ldflex. When used with rdflib.js in nodejs context, it supports all fetcher methods (load, putBack, webOperation, etc.) on local files and folders.
+
+You do not need to do anything special to use this library with rdflib.js or other tools in nodjs, just make sure you update solid-auth-cli to 0.2.0 or higher, then, smply use file:// IRIs anywhere other IRIs can be used (other than with the Updater).
+
 
 ## Requests
 
