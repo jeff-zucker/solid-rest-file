@@ -1,7 +1,7 @@
 {
   "name": "solid-rest-file",
   "version": "0.0.1",
-  "description": "a minimal Solid REST server using the local file system",
+  "description": "treat a file system as a (very) minimal Solid REST server",
   "author": "Jeff Zucker",
   "license": "MIT",
   "main": "index.js",

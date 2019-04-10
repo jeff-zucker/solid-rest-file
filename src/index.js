@@ -24,13 +24,23 @@ function json (stream) {
 }
 
 function response (status, body, headers) {
+  let message = {
+    200 : "Ok",
+    201 : "Created",
+    204 : "Deleted",
+    404 : "Not Found",
+    406 : "No Body",
+    409 : "Conflict",
+    500 : "Internal Server Error"
+  }
   return {
     status: status,
     ok: status >= 200 && status <= 299,
+    statusText: message[status],
     headers: new Headers(headers),
     body: body,
     text: text.bind(null, body),
-   json: json.bind(null, body)
+    json: json.bind(null, body)
   }
 }
 
