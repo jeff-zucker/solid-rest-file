@@ -106,3 +106,5 @@ As per the spec, this will fail if the containing folder "/somepath/morepath" do
    * 409 on Container-not-empty or other failure
 * All other methods
    * 405 method not supported
+
+copyright &copy; 2019, Jeff Zucker, may be freely distributed with the MIT license
