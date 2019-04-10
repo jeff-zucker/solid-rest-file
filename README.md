@@ -14,9 +14,20 @@ Not implemented: HEAD, OPTION and PATCH (and therefore rdflib's Updater).
 
 Although this library may be used stand-alone, it is meant primarily for use with other Solid tools. This library is included in solid-auth-cli, the nodejs auth/fetch library for Solid which is itself included in rdflib.js and solid-file-client and (soon) query-ldflex. When used with rdflib.js in nodejs context, it supports all fetcher methods (load, putBack, webOperation, etc.) on local files and folders.
 
-You do not need to do anything special to use this library with rdflib.js or other tools in nodjs, just make sure you update solid-auth-cli to 0.2.0 or higher, then, smply use file:// IRIs anywhere other IRIs can be used (other than with the Updater).
+Here's how to use this library with  rdflib:
 
-
+  ```javascript
+  const $rdf = require('rdflib^0.20.0');
+  const auth = require('solid-auth-cli^0.2.0'); // includes solid-rest-file
+  const store = $rdf.graph();
+  const fetcher = $rdf.fetcher(store,{fetch:auth.fetch});
+  /*
+    you can now use any rdflib methods excpet updater to 
+    create, delete, access, and query file:// resources
+    if you use auth.login, you can also move resources 
+    between a remote Pod and your local file system.
+  */
+  ```
 ## Requests
 
 This library expects IRIs that start with "file://" and are followed by
