@@ -18,8 +18,10 @@
   },
   "keywords": [],
   "contributors": [
-    {"name":"Thomas Bergwinki"}
-   ],
+    {
+      "name": "Thomas Bergwinki"
+    }
+  ],
   "bugs": {
     "url": "https://github.com/jeff-zucker/solid-rest-file/issues"
   },
@@ -31,6 +33,7 @@
     "readable-error": "^1.0.0"
   },
   "devDependencies": {
-    "jest": "^24.7.1"
+    "jest": "^24.7.1",
+    "rdflib": "^0.20.1"
   }
 }

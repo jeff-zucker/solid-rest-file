@@ -4,7 +4,7 @@
 
 Implements a subset of the [Solid REST Specification](https://github.com/solid/solid-spec/blob/master/api-rest.md) for file-systems.  Supports
 addressing the file system with file:// IRIs and returns an HTTP
-response object with appropriate status codes and headers.  
+response object with appropriate status codes and headers.  The library may be used stand-alone but is more likely to be used indirectly via rdflib and other Solid tools which support nodejs.  The [stand-alone test](./tests/test.js) and [rdflib test](./tests/rdflib.test.js) contain examples of common usage.
 
 Not implemented: HEAD, OPTION and PATCH (and therefore rdflib's Updater).
 
