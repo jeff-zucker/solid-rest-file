@@ -9,15 +9,6 @@ const folder   = path.join( base,foldername );
 const file    = path.join( folder, filename );
 const msg     = "hello world";
 
-async function run(){
-    console.log(
-        await postContainer(base,foldername)
-    );
-}
-if(typeof test === "undefined") {
-    run();
-}
-else {
 test('POST Container',()=>{
     return expect(postContainer(base,foldername)).resolves.toBe(201);
 });
@@ -40,7 +31,7 @@ test('DELETE Resource',()=>{
 test('DELETE Container',()=>{
     return expect(deleteResource(folder)).resolves.toBe(204)
 });
-}
+
 async function getResource(file){
     let res = await fetch(file);
     if( res.status != 200 ) return false;
