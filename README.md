@@ -28,6 +28,7 @@ Here's how to use this library with  rdflib:
     between a remote Pod and your local file system.
   */
   ```
+
 ## Requests
 
 This library expects IRIs that start with "file://" and are followed by
@@ -40,7 +41,7 @@ would be requested like this:
 
 Note the three slashes in the pathname.
 
-A GET request uses fetch() with a single parameter: the pathname of the resource requested
+A GET request uses fetch() with a single parameter: the pathname of the resource requested.  The resource is returned as a readable stream which will be the contents of a file, or, if a Container is requested, the stream will be a Turtle representation of the Container including a list of the resources it contains.
 
   ```javascript
   const fetch = require("solid-rest-file");
