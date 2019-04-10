@@ -29,6 +29,7 @@ function response (status, body, headers) {
     201 : "Created",
     204 : "Deleted",
     404 : "Not Found",
+    405 : "Method Not Supported",
     406 : "No Body",
     409 : "Conflict",
     500 : "Internal Server Error"
@@ -61,6 +62,12 @@ async function fetch (iri, options) {
   */
   if( fstat && fstat.isDirectory() && options.method==="DELETE"){
       return Promise.resolve( response( await _unlinkFolder(pathname) ) );
+  }
+
+  /* FOLDER PUT (not supported per the spec)
+  */
+  if(options.method==="PUT"&& options.Link && options.Link.match("Container")){
+       return Promise.resolve( response(405) );
   }
 
   if( options.method==="POST"){

@@ -53,7 +53,7 @@ All other requests use fetch() with two parameters, the pathname and a set of op
    }).then( ...
 
   ```
-As per the spec, this will fail if the containing folder "/somepath/morepath" does not already exist.
+As per the spec, this will fail if the containing folder "/somepath/morepath" does not already exist.  Use PUT to create a resource and its container including intermediate containers.  E.g. PUT file:///somepath/morepath/newFile will create the folders /somepath and /somepath/morepath and the file newFile.  Again as per the spec, PUT on a Container by itself is not suppoted.
 
 ## Responses
 
@@ -70,6 +70,8 @@ As per the spec, this will fail if the containing folder "/somepath/morepath" do
    * returns created path in location header
 * PUT Resource
    * same as POST Resouce except if containing folder is not found, it is created (including intermediary folders if needed)
+* PUT Container
+   * 405 method not supported
 * GET Resource
    * 200 on success
    * 404 if not found
@@ -86,3 +88,5 @@ As per the spec, this will fail if the containing folder "/somepath/morepath" do
    * 204 on success
    * 404 on not found
    * 409 on Container-not-empty or other failure
+* All other methods
+   * 405 method not supported
