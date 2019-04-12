@@ -1,6 +1,7 @@
 # Solid REST file
 
 ## treat a file system as a (very) minimal Solid server
+<br><a href="http://badge.fury.io/js/solid-rest-file">![npm](https://badge.fury.io/js/solid--rest-file.svg)</a>
 
 Implements a subset of the [Solid REST Specification](https://github.com/solid/solid-spec/blob/master/api-rest.md) for file-systems.  Supports
 addressing the file system with file:// IRIs and returns an HTTP
