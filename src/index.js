@@ -5,13 +5,11 @@ const path = require('path')
 const url = require('url')
 const Headers = require('node-fetch').Headers
 const ReadableError = require('readable-error')
+const Readable = require('stream').Readable
 
 function text (stream) {
   return new Promise((resolve, reject) => {
-    stream = stream || "";
-    if(typeof stream === "string") {
-        resolve(stream);
-    }
+    if(typeof stream === "string") return stream;
     stream.pipe(concatStream({
       encoding: 'string'
     }, resolve))
@@ -20,7 +18,7 @@ function text (stream) {
 }
 
 function json (stream) {
-  return text(stream).then(text => JSON.parse(text))
+    return text(stream).then(text => JSON.parse(text))
 }
 
 function response (status, body, headers) {
@@ -28,6 +26,7 @@ function response (status, body, headers) {
     200 : "Ok",
     201 : "Created",
     204 : "Deleted",
+    400 : "Intermediate Container Not Found",
     404 : "Not Found",
     405 : "Method Not Supported",
     406 : "No Body",
@@ -55,7 +54,7 @@ async function fetch (iri, options) {
   /* FOLDER GET
   */
   if( fstat && fstat.isDirectory() && options.method==="GET"){
-      return Promise.resolve( _readFolder(pathname)  );
+      return await  _readFolder(pathname) ;
   }
 
   /* FOLDER DELETE
@@ -66,9 +65,6 @@ async function fetch (iri, options) {
 
   /* FOLDER PUT (not supported per the spec)
   */
-  if(options.method==="PUT"&& options.Link && options.Link.match("Container")){
-       return Promise.resolve( response(405) );
-  }
 
   if( options.method==="POST"){
       /*
@@ -77,18 +73,18 @@ async function fetch (iri, options) {
          Set the pathname to be pathname join Slug
       */
       if( !fstat ) return Promise.resolve(response(404));
-      if( !options.Slug ) return Promise.resolve(response(406));
-      pathname = path.join(pathname,options.Slug);
+      pathname = path.join(pathname,options.headers.Slug);
+
       /* 
          FOLDER POST
       */
-      if( options.Link && options.Link.match("Container") ) {
+      if( options.headers.Link && options.headers.Link.match("Container") ) {
           return Promise.resolve( response( await _makeFolder(pathname) ) );
       }
       /* 
           FILE POST (handled same as PUT)
       */
-      else if( options.Link && options.Link.match("Resource") ) {
+      else if(options.headers.Link && options.headers.Link.match("Resource")){
           options.method = "FILE-POST"
       }
   }
@@ -134,26 +130,25 @@ async function fetch (iri, options) {
           let filename = path.basename(pathname);
           let reg = new RegExp(filename+"\$")
           let foldername = pathname.replace(reg,'');
-          let fresults = _makeFolder(foldername,"recursive");
-          if(!fresults===201) Promise.resolve( response(500) ); 
+          let exists = await _fileStat(foldername);
+          if(!exists){
+              let fresults = await _makeFolder(foldername,"recursive");
+              if(!fresults===201) Promise.resolve( response(500) ); 
+          }
       }
       return new Promise((resolve) => {
-          if (!options.body) { return resolve(
-            response(406)
-          )}
-          let Readable = require('stream').Readable
           let s = new Readable
           s.push(options.body)
           s.push(null)  
           options.body = s;
           let status = 201;
           options.body.pipe(fs.createWriteStream(pathname)).on('finish',()=>{
-              resolve( response(status,"Created",{'location': pathname}) )
+              resolve( response(status,undefined,{'location': pathname}) )
           }).on('error', (err) => { 
+               if(options.method==="PUT") resolve( response(405) )
                resolve( response(500) )
           })
       })
-
   }
 
   /* UNKNOWN METHOD
@@ -161,6 +156,13 @@ async function fetch (iri, options) {
   else {
       return Promise.resolve( response(405) )
   }
+}
+
+function makeStream(text){
+      let s = new Readable
+      s.push(text)
+      s.push(null)  
+      return s;
 }
 
 async function _fileStat(fn){
@@ -172,7 +174,7 @@ function _unlinkFile(fn){
     return new Promise(function(resolve) {
         fs.unlink( fn, function(err) {
             if(err)  resolve( 409 );
-            else     resolve( 204 );
+            else     resolve( 200 );
         });
     });
 }
@@ -182,7 +184,7 @@ function _unlinkFolder(fn){
             if(err) {
                 resolve( 409 );
             } else {
-                resolve( 204 );
+                resolve( 200 );
             }
         });
     });
@@ -203,10 +205,7 @@ function _makeFolder(fn,recursive){
 }
 function _readFolder(pathname){
     return new Promise(function(resolve) {
-        fs.readdir(pathname, function(err, filenames) {
-            if (err) {
-                return resolve( 409 );
-            }
+       fs.readdir(pathname, function(err, filenames) {
             let str = `@prefix ldp: <http://www.w3.org/ns/ldp#>.
 
 <>
@@ -219,12 +218,12 @@ function _readFolder(pathname){
                 });
                 str = str.replace(/,$/,"");
             }
-            str = str+".";
-            return resolve( response(
+            str = makeStream(str+".");
+            return ( resolve(response(
                 200,
                 str,
-                {'content-type':'text/turtle'}
-            ))
+                {'Content-Type':'text/turtle'}
+            )))
         });
     });
 }

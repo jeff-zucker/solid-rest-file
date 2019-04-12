@@ -77,32 +77,29 @@ As per the spec, this will fail if the containing folder "/somepath/morepath" do
 * POST Container
    * 201 on success
    * 404 if the Container of the Container does not exist
-   * 409 if Container pre-exists or other failure
    * returns created path in location header
 * POST Resource
    * 201 on success
    * 404 if the Container of the new Resource does not exist
-   * 406 on body empty
-   * 500 on other failure
    * returns created path in location header
 * PUT Resource
-   * same as POST Resouce except if containing folder is not found, it is created
+   * 201 on success
+   * creates Container of the new Resource if it does not exist
+   * returns created path in location header
 * PUT Container
    * 405 method not supported
 * GET Resource
    * 200 on success
    * 404 if not found
-   * 500 on other failure
    * returns body of resource as a readable stream in response.body
    * returns content-type in header
 * GET Container
    * 200 on success
    * 404 on not found
-   * 500 on other failure
    * returns turtle representation of ldp:BasicContainer as readable stream
 * DELETE Resource
 * DELETE Container
-   * 204 on success
+   * 200 on success
    * 404 on not found
    * 409 on Container-not-empty or other failure
 * All other methods
