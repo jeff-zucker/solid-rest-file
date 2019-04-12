@@ -64,10 +64,13 @@ All other requests use fetch() with two parameters, the pathname and a set of op
   ```javascript
   fetch( "file:///somepath/morepath", {
       "Method":"POST",
-      "Content-Type": "text/turtle",
-      "Link": '<http://www.w3.org/ns/ldp#BasicContainer>; rel="type"',
-      "Slug": "newFolder"
-   }).then( ...
+      body: msg,
+      headers: { 
+          Link: '<http://www.w3.org/ns/ldp#BasicContainer>; rel="type"',
+          Slug: newFolder,
+          "Content-Type": "text/turtle",
+      }
+  }).then( ...
 
   ```
 As per the spec, this will fail if the containing folder "/somepath/morepath" does not already exist.  Use PUT to create a resource and its container. PUT on a Container by itself is not suppoted.
