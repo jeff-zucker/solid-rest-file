@@ -66,8 +66,8 @@ All other requests use fetch() with two parameters, the pathname and a set of op
       "Method":"POST",
       headers: { 
           Link: '<http://www.w3.org/ns/ldp#BasicContainer>; rel="type"',
-          Slug: newFolder,
           "Content-Type": "text/turtle",
+          Slug: newFolder
       }
   }).then( ...
 
