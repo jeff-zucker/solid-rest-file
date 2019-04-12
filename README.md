@@ -46,7 +46,7 @@ A GET request uses fetch() with a single parameter: the pathname of the resource
   ```javascript
   const fetch = require("solid-rest-file");
   const path  = require("path");
-  const file  = path.join("file://",process.cwd(), "foo.txt");
+  const file  = "file://"+ path.join(process.cwd(), "foo.txt");
   fetch( file ).then( response => {
       if(response.ok) {
           response.text().then( txt => {
