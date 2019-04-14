@@ -3,6 +3,7 @@
 ## treat a file system as a (very) minimal Solid server
 <br>
 [![NPM](https://nodei.co/npm/solid-rest-file.png)](https://nodei.co/npm/solid-rest-file/)
+<br>
 <p>
 Implements a subset of the [Solid REST Specification](https://github.com/solid/solid-spec/blob/master/api-rest.md) for file-systems.  Supports
 addressing the file system with file:// IRIs and returns an HTTP
