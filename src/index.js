@@ -113,9 +113,9 @@ function json (stream) {
 /*
   RESOURCE HANDLERS
 */
-async function _getObjectType(fn){
+function _getObjectType(fn){
     let stat;
-    try { stat = await fs.lstatSync(fn); }
+    try { stat = fs.lstatSync(fn); }
     catch(err){ return "notFound"; }
     return ( stat.isDirectory()) ? "Container" : "Resource";
 }
@@ -188,22 +188,25 @@ async function _makeContainers(pathname){
           if(!fresults===201) Promise.resolve( response(500) ); 
        }
 }
-function _getContainer(pathname){
+async function _getContainer(pathname){
     return new Promise(function(resolve) {
        fs.readdir(pathname, function(err, filenames) {
+            let str2 = "";
             let str = `@prefix ldp: <http://www.w3.org/ns/ldp#>.
-
-<>
-    a ldp:BasicContainer, ldp:Container
-` // eos
+<> a ldp:BasicContainer, ldp:Container` // eos
             if(filenames.length){
                 str = str + "; ldp:contains\n";
                 filenames.forEach(function(filename) {
-                    str = str + `<${path.join(pathname,filename)}>,`
+                    let fn = path.join(pathname,filename)
+                    let ftype = _getObjectType(fn);
+                    ftype = (ftype==="Container") ? "BasicContainer; a ldp:Container": ftype
+                    str = str + `<${fn}>,\n`
+                    str2=str2+`<${fn}> a ldp:${ftype}.\n`
                 });
-                str = str.replace(/,$/,"");
+                str = str.replace(/,\n$/,"")
             }
-            str = _makeStream(str+".");
+            str = str+`.\n`+str2;
+            str = _makeStream(str);
             return ( resolve(response(
                 200,
                 str,
