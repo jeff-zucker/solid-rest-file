@@ -49,11 +49,13 @@ async function fetch (iri, options) {
   }
   if( options.method==="POST"){
       if( objectType==="notFound" ) return Promise.resolve(response(404));
-      pathname = path.join(pathname,options.headers.Slug);
-      if( options.headers.Link && options.headers.Link.match("Container") ) {
+      let slug = options.headers.Slug || options.headers.slug
+      let link = options.headers.Link || options.headers.link
+      pathname = path.join(pathname,slug);
+      if( link && link.match("Container") ) {
           return Promise.resolve( response( await postContainer(pathname) ) );
       }
-      else if(options.headers.Link && options.headers.Link.match("Resource")){
+      else if( link && link.match("Resource")){
           options.method = "POST-RESOURCE"
       }
   }
