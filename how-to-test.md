@@ -8,7 +8,7 @@
 
 ## How to run the test
 
-  1. In your browser, go to (solid-rest-file)[https://github.com/jeff-zucker/solid-rest-file]
+  1. In your browser, go to [solid-rest-file](https://github.com/jeff-zucker/solid-rest-file)
 
   2. Click on **clone or download** (green button in upper right)
 
