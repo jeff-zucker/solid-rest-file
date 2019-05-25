@@ -38,7 +38,7 @@ see, report the results as "all tests passed".  Otherwise, please take a
 screenshot and attach it to the email, or cut and paste the results into 
 the email or simply manually copy the results into the email.
 
-## Questions of problems?
+## Questions or problems?
 
 Go to [the Solid app-development chat room](https://gitter.im/solid/app-development)
 and ping @jeff-zucker and I'll respond as soon as I can.  I'm on the U.S. west coast,
