@@ -48,9 +48,9 @@ async function fetch (iri, options) {
       return Promise.resolve( response( await _deleteContainer(pathname) ) );
   }
   if( options.method==="POST"){
-      if( objectType==="notFound" ) return Promise.resolve(response(404));
       let slug = options.headers.Slug || options.headers.slug
       let link = options.headers.Link || options.headers.link
+      if( objectType==="notFound" ) return Promise.resolve(response(404));
       pathname = path.join(pathname,slug);
       if( link && link.match("Container") ) {
           return Promise.resolve( response( await postContainer(pathname) ) );
@@ -128,8 +128,10 @@ async function _getResource(pathname,options){
     if(!success) return Promise.resolve(response(500)) 
     return Promise.resolve( response(
         200,
-        success,
-        {'Content-Type':options.contentTypeLookup(path.extname(pathname))}
+        success, {
+          'Content-Type':options.contentTypeLookup(path.extname(pathname)),
+          Link : '<.meta>; rel="describedBy", <.acl>; rel="acl"'
+        }
     ))
 }
 function _putResource(pathname,options){
@@ -200,6 +202,7 @@ async function _getContainer(pathname){
                 str = str + "; ldp:contains\n";
                 filenames.forEach(function(filename) {
                     let fn = path.join(pathname,filename)
+                    if(fn.endsWith('.acl') || fn.endsWith('.meta')) continue
                     let ftype = _getObjectType(fn);
                     ftype = (ftype==="Container") ? "BasicContainer; a ldp:Container": ftype
                     str = str + `<${fn}>,\n`
@@ -211,8 +214,10 @@ async function _getContainer(pathname){
             str = _makeStream(str);
             return ( resolve(response(
                 200,
-                str,
-                {'Content-Type':'text/turtle'}
+                str, {
+                    'Content-Type':'text/turtle',
+                    Link : '<.meta>; rel="describedBy", <.acl>; rel="acl"'
+                }
             )))
         });
     });

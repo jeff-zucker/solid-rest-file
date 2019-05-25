@@ -60,6 +60,10 @@ async function getResource(file){
     emptyStore()
     let res = await fetcher.load(file);
     if( res.status != 200 ) return false;
+/*
+    let aclRel = $rdf.sym('http://www.iana.org/assignments/link-relations/describedBy')
+    console.log( store.any( $rdf.sym(file),aclRel).value )
+*/
     res = store.any( DOC("#test"),DOC("#message"),null)
     return( res.value === msg );
 }
