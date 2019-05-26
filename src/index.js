@@ -202,11 +202,12 @@ async function _getContainer(pathname){
                 str = str + "; ldp:contains\n";
                 filenames.forEach(function(filename) {
                     let fn = path.join(pathname,filename)
-                    if(fn.endsWith('.acl') || fn.endsWith('.meta')) continue
-                    let ftype = _getObjectType(fn);
-                    ftype = (ftype==="Container") ? "BasicContainer; a ldp:Container": ftype
-                    str = str + `<${fn}>,\n`
-                    str2=str2+`<${fn}> a ldp:${ftype}.\n`
+                    if(!fn.endsWith('.acl') && !fn.endsWith('.meta')){
+                      let ftype = _getObjectType(fn);
+                      ftype = (ftype==="Container") ? "BasicContainer; a ldp:Container": ftype
+                      str = str + `<${fn}>,\n`
+                      str2=str2+`<${fn}> a ldp:${ftype}.\n`
+                   }
                 });
                 str = str.replace(/,\n$/,"")
             }
