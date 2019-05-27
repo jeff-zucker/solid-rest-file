@@ -67,7 +67,7 @@ async function fetch (iri, options) {
           return Promise.resolve(response(404))
       }
       else {
-          return await _getRsource(pathname,options);
+          return await _getResource(pathname,options);
       }
   }
   if (options.method === 'HEAD') {
