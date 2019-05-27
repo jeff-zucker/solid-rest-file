@@ -10,7 +10,7 @@ addressing the file system with file:// IRIs and returns an HTTP
 response object with appropriate status codes and headers.  The library may be used stand-alone but is more likely to be used indirectly via rdflib and other Solid tools which support nodejs.  
 </p>
 
-Not implemented: HEAD, OPTION and PATCH (and therefore rdflib's Updater).
+Not implemented: OPTION and PATCH (and therefore rdflib's Updater).
 
 **Note**: this library incorporates and extends Thomas Bergwinki's excellent [file-fetch](https://github.com/bergos/file-fetch)
 
@@ -99,10 +99,18 @@ As per the spec, this will fail if the containing folder "/somepath/morepath" do
    * 404 if not found
    * returns body of resource as a readable stream in response.body
    * returns content-type in header
+   * returns .acl, .describedBy, and type Links in header
 * GET Container
    * 200 on success
    * 404 on not found
    * returns turtle representation of ldp:BasicContainer as readable stream
+   * returns content-type in header
+   * returns .acl, .describedBy, and type Links in header
+* HEAD Container
+* HEAD Resource
+   * 200 on success
+   * 404 on not found
+   * returns .acl, .describedBy, and type Links in header
 * DELETE Resource
 * DELETE Container
    * 200 on success
