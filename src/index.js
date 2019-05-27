@@ -44,6 +44,9 @@ async function fetch (iri, options) {
   if( options.method==="GET" && objectType==="Container"){
       return await  _getContainer(pathname) ;
   }
+  if( options.method==="HEAD" && objectType==="Container"){
+      return await  _getContainer(pathname,'head') ;
+  }
   if( options.method==="DELETE" && objectType==="Container" ){
       return Promise.resolve( response( await _deleteContainer(pathname) ) );
   }
@@ -64,8 +67,11 @@ async function fetch (iri, options) {
           return Promise.resolve(response(404))
       }
       else {
-          return await _getResource(pathname,options);
+          return await _getRsource(pathname,options);
       }
+  }
+  if (options.method === 'HEAD') {
+      return await _getResource(pathname,options,'head',objectType);
   }
   else if (options.method === 'DELETE' ) {
       if( objectType==="notFound" ) {
@@ -121,17 +127,28 @@ function _getObjectType(fn){
     catch(err){ return "notFound"; }
     return ( stat.isDirectory()) ? "Container" : "Resource";
 }
-async function _getResource(pathname,options){
+async function _getResource(pathname,options,headOnly,objectType){
+    let fn = pathname.replace(/.*\//,'');    
+    if( objectType==="notFound" ) {
+    return Promise.resolve( response(
+        404,
+        undefined, {
+'Content-Type':options.contentTypeLookup(path.extname(pathname)),
+Link : `<${fn}.meta>; rel="describedBy", <${fn}.acl>; rel="acl", <http://www.w3.org/ns/ldp#Resource>; rel="type"`
+    }))
+    }
     let success;
-    try{ success = await fs.createReadStream(pathname); }
-    catch(e){}
-    if(!success) return Promise.resolve(response(500)) 
+    if(!headOnly) {
+        try{ success = await fs.createReadStream(pathname); }
+        catch(e){}
+        if(!success) return Promise.resolve(response(500)) 
+    }
     return Promise.resolve( response(
         200,
         success, {
-          'Content-Type':options.contentTypeLookup(path.extname(pathname)),
-          Link : '<.meta>; rel="describedBy", <.acl>; rel="acl"'
-        }
+'Content-Type':options.contentTypeLookup(path.extname(pathname)),
+Link : `<${fn}.meta>; rel="describedBy", <${fn}.acl>; rel="acl", <http://www.w3.org/ns/ldp#Resource>; rel="type"`
+    }
     ))
 }
 function _putResource(pathname,options){
@@ -192,8 +209,17 @@ async function _makeContainers(pathname){
           if(!fresults===201) Promise.resolve( response(500) ); 
        }
 }
-async function _getContainer(pathname){
+async function _getContainer(pathname,headOnly) {
     return new Promise(function(resolve) {
+       if(headOnly){
+            return ( resolve(response(
+                200,
+                undefined, {
+                   'Content-Type':'text/turtle',
+Link : `<.meta>; rel="describedBy", <.acl>; rel="acl", <http://www.w3.org/ns/ldp#Container>; rel="type", <http://www.w3.org/ns/ldp#BasicContainer>; rel="type"`
+                }
+            )))
+       }
        fs.readdir(pathname, function(err, filenames) {
             let str2 = "";
             let str = `@prefix ldp: <http://www.w3.org/ns/ldp#>.
@@ -216,8 +242,8 @@ async function _getContainer(pathname){
             return ( resolve(response(
                 200,
                 str, {
-                    'Content-Type':'text/turtle',
-                    Link : '<.meta>; rel="describedBy", <.acl>; rel="acl"'
+                   'Content-Type':'text/turtle',
+Link : `<.meta>; rel="describedBy", <.acl>; rel="acl", <http://www.w3.org/ns/ldp#Container>; rel="type", <http://www.w3.org/ns/ldp#BasicContainer>; rel="type"`
                 }
             )))
         });

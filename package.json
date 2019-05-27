@@ -1,6 +1,6 @@
 {
   "name": "solid-rest-file",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "treat a file system as a (very) minimal Solid REST server",
   "author": "Jeff Zucker",
   "license": "MIT",
