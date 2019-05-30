@@ -221,6 +221,12 @@ Link : `<.meta>; rel="describedBy", <.acl>; rel="acl", <http://www.w3.org/ns/ldp
             )))
        }
        fs.readdir(pathname, function(err, filenames) {
+            filenames=filenames.filter( item => {
+                 if(!item.endsWith('.acl') && !item.endsWith('.meta')){
+                   return item
+                 }
+              }
+            )
             let str2 = "";
             let str = `@prefix ldp: <http://www.w3.org/ns/ldp#>.
 <> a ldp:BasicContainer, ldp:Container` // eos
@@ -228,12 +234,10 @@ Link : `<.meta>; rel="describedBy", <.acl>; rel="acl", <http://www.w3.org/ns/ldp
                 str = str + "; ldp:contains\n";
                 filenames.forEach(function(filename) {
                     let fn = path.join(pathname,filename)
-                    if(!fn.endsWith('.acl') && !fn.endsWith('.meta')){
-                      let ftype = _getObjectType(fn);
-                      ftype = (ftype==="Container") ? "BasicContainer; a ldp:Container": ftype
-                      str = str + `<${fn}>,\n`
-                      str2=str2+`<${fn}> a ldp:${ftype}.\n`
-                   }
+                    let ftype = _getObjectType(fn);
+                    ftype=(ftype==="Container")?"BasicContainer; a ldp:Container": ftype
+                    str = str + `<${fn}>,\n`
+                    str2=str2+`<${fn}> a ldp:${ftype}.\n`
                 });
                 str = str.replace(/,\n$/,"")
             }
