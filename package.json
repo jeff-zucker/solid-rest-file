@@ -1,6 +1,6 @@
 {
   "name": "solid-rest-file",
-  "version": "0.0.9",
+  "version": "1.0.0",
   "description": "treat a file system as a (very) minimal Solid REST server",
   "author": "Jeff Zucker",
   "license": "MIT",
@@ -29,7 +29,8 @@
   "dependencies": {
     "concat-stream": "^2.0.0",
     "mime-types": "^2.1.22",
-    "node-fetch": "^2.3.0"
+    "node-fetch": "^2.3.0",
+    "solid-rest": "^1.0.0"
   },
   "devDependencies": {
     "jest": "^24.7.1",

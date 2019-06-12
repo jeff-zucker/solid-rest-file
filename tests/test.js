@@ -2,12 +2,12 @@
 const fetch = require('../src');
 const path  = require("path")
 
-let base  = path.join("file://",process.cwd());
+let base  = "file://"+process.cwd()+"/"
 const foldername  = "test2";
 const filename   = "file-test.ttl";
 
-const folder   = path.join( base,foldername );
-const file    = path.join( folder, filename );
+const folder   = base + foldername
+const file    = folder + "/"+ filename ;
 const deep  = "file://"+path.join(base,foldername,"test3",filename);
 const bad = "FOO"+filename;
 const msg     = '{"msg":"hello world"}';
