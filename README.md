@@ -1,4 +1,4 @@
-# Solid REST file
+# Solid REST file - DEPRECATED - use solid-rest/src/file.js instead !!!
 
 ## treat a file system as a (very) minimal Solid server
 
